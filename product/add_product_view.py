@@ -39,7 +39,6 @@ class FileUploadForm(forms.Form):
 
 
 @login_required(login_url='/admin/login')
-@user_passes_test(lambda u: u.is_staff)
 def upload_view(request):
     """
     Add products, only for admin, retrieve the form, the scrap the urls

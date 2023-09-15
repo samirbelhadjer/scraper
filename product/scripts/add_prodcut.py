@@ -16,9 +16,6 @@ def get_random_user_agent():
     return user_agent
 
 
-
-
-
 def AddProduct(prod, store, cate, maxVal, more, less):
     user_agent = get_random_user_agent()
 

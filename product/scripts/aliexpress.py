@@ -86,8 +86,6 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
     language = driver.find_element(By.CSS_SELECTOR, '#nav-global > div.ng-item-wrap.ng-item.ng-switcher.active > div > div > div > div.switcher-btn.item.util-clearfix > button')
     language.click()
     sleep(1)
-
-
     driver.execute_script("window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })")
     sleep(2)
     driver.execute_script("window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })")
@@ -123,7 +121,9 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
             except : 
                 pass
 
-            full_name = driver.find_element(By.XPATH, '//*[@id="root"]/div[3]/div[1]/div[1]/div[2]/div[1]/h1').text        
+            full_name = driver.find_element(By.XPATH, '//*[@id="root"]/div[3]/div[1]/div[1]/div[2]/div[1]/h1').text 
+            print("----------->>",full_name)
+       
             try :
                 #shipping = driver.find_element(By.CSS_SELECTOR,'#root > div.pdp-wrap.pdp-body > div.pdp-body-right > div > div > div.shipping--wrap--Dhb61O7 > div > div > div.dynamic-shipping-line.dynamic-shipping-titleLayout > span > span > strong').text.split("€")[-1]
                 shipping = "0"
