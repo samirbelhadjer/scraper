@@ -1,0 +1,130 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+<!-- Add Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+{% block header %}
+<div id="header" class="text-center">
+  <div id="branding">
+    <a href="/admin">
+      <h1>Scraper admin panel</h1>
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="background-color: rgb(248, 245, 245);
+box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+border-radius: 4px;
+padding: 20px;
+margin-bottom: 20px;">
+
+  <div class="container">
+    <h1 class="text-center">Start scraping</h1>
+    <form method="POST" enctype="multipart/form-data" class="form-group text-center"
+      style="margin: 0 auto; width: 50%;">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="id_categories">Categories :</label>
+        {{ form.categories }}
+      </div>
+      <div class="form-group">
+        <label for="id_percentage">Price of 1USD (EUR) in DZD:</label>
+        {{ form.percentage }}
+      </div>
+      <div class="form-group">
+        <label for="id_original_store">store:</label>
+        {{ form.store }}
+      </div>
+      <div class="form-group">
+        <label for="id_max_value">Max price value (DZD): </label>
+        {{ form.max_value }}
+      </div>
+      <div class="form-group"><label for="id_more">Extra cost if more (DZD): </label>
+        <!-- <input  class="form-control" name="more" id="id_more"> -->
+        {{ form.more }}
+      </div>
+      <div class="form-group">
+        <label for="id_less">Extra cost if less (DZD): </label>
+        {{ form.less }}
+      </div>
+      <div class="form-group">
+        <label for="id_urls">URLs: </label>
+        {{ form.urls }}
+      </div> {% if not output %}
+      <div class="terminal">
+        <pre class="text-danger">Please, don't leave this window after you start the upload</pre>
+      </div>
+      {% endif %}
+
+      <button type="submit" {% if form.is_valid %}class="btn btn-primary"{% else %}class="btn btn-primary disabled"{% endif %}>Start Scraping</button>
+
+    </form>
+
+    {% if output%}
+    <div class="terminal">
+      <pre style="white-space: pre-wrap;">{{ output|linebreaks|safe }}</pre>
+  </div>
+  
+    {% endif %}
+
+  </div>
+</div>
+{% block extra_css %}
+
+<style>
+  /* Add custom CSS to style the text fields and labels */
+  textarea, input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  label {
+    font-weight: 600;
+    margin-bottom: 10px;
+
+  }
+
+  /* Add custom CSS to style the button */
+  button[type="submit"] {
+    background-color: #017757;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    display: block;
+    width: auto;
+    padding: 10px;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  button[type="submit"]:hover {
+    background-color: #333;
+    cursor: pointer;
+  }
+</style>
+{% endblock %}
+
+<!-- Add Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+  integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+  integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+  integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+{% endblock %}
