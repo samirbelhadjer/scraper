@@ -42,7 +42,6 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
     chrome_options.add_argument("--disable-gpu") 
 
     homedir = os.getcwd()
-    print('---->',homedir)
     webdriver_service = Service(homedir+"\\product\\scripts\\chromedriver_win32\chromedriver.exe")
 
     driver = webdriver.Chrome(chrome_options=chrome_options, service=webdriver_service)
@@ -123,7 +122,6 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
                 pass
 
             full_name = driver.find_element(By.XPATH, '//*[@id="root"]/div[3]/div[1]/div[1]/div[2]/div[1]/h1').text 
-            print("----------->>",full_name)
        
             try :
                 #shipping = driver.find_element(By.CSS_SELECTOR,'#root > div.pdp-wrap.pdp-body > div.pdp-body-right > div > div > div.shipping--wrap--Dhb61O7 > div > div > div.dynamic-shipping-line.dynamic-shipping-titleLayout > span > span > strong').text.split("€")[-1]
@@ -142,7 +140,7 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
 
             driver.close()
             driver.switch_to.window(driver.window_handles[0])
-            images = {"images_url": [photo]}
+            images = [photo]
 
             try : 
                 AddProduct(dict(
