@@ -42,7 +42,8 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
     chrome_options.add_argument("--disable-gpu") 
 
     homedir = os.getcwd()
-    webdriver_service = Service(f"C:\\Users\\SamirB\\Documents\\scraper\\scraper\\product\\scripts\\chromedriver_win32\chromedriver.exe")
+    print('---->',homedir)
+    webdriver_service = Service(homedir+"\\product\\scripts\\chromedriver_win32\chromedriver.exe")
 
     driver = webdriver.Chrome(chrome_options=chrome_options, service=webdriver_service)
     driver.get(url)
