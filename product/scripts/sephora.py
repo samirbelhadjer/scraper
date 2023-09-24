@@ -23,14 +23,16 @@ def get_random_user_agent():
 
 
 
-def scrap_sephora(url, perc, store, cate,sous_category, maxVal, more, less):
-    homedir = os.path.expanduser("~")
-    webdriver_service = Service(f"{homedir}/chromedriver/stable/chromedriver")
+def scrap_sephora(url, perc, store, cate, maxVal, more, less):
+    
+    print('---------->',url, perc, store, cate, maxVal, more, less)
+    homedir = os.getcwd()
+    webdriver_service = Service(homedir+"\\product\\scripts\\chromedriver_win32\chromedriver.exe")
 
 
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
+    #options.add_argument("--headless")
+    #options.add_argument("--no-sandbox")
     options.add_argument("start-maximized")
     options.add_argument("--disable-dev-shm-usage")
 
@@ -67,16 +69,15 @@ def scrap_sephora(url, perc, store, cate,sous_category, maxVal, more, less):
     products = []
     for product in driver.find_elements(By.XPATH, '/html/body/div[2]/div/div/div/div[2]/main/div[2]/div[2]/div/a'):
         original_link = product.get_attribute('href')
+        print('---->link prod',original_link)
         try:
             photo = product.find_element(By.XPATH, './/picture/img').get_attribute('src')
         except:
             continue
         
-        brand = product.find_element(By.XPATH, './span[1]').get_attribute("textContent")
         full_name = product.find_element(By.XPATH, './span[2]').get_attribute("textContent")
 
         price = float(product.find_element(By.XPATH, './/b/span').get_attribute("textContent").replace('$','').split(' ')[0]) * perc
-        staff_pick = float(product.find_element(By.XPATH, './div[2]/span[1]').get_attribute('aria-label').split(" ")[0]) > 4
         driver.execute_script("window.open('');")
         driver.switch_to.window(driver.window_handles[1])
         driver.get(original_link)
@@ -85,17 +86,15 @@ def scrap_sephora(url, perc, store, cate,sous_category, maxVal, more, less):
             description.append("".join(i.get_attribute("innerText")))
         driver.close()
         driver.switch_to.window(driver.window_handles[0])
-
+        images = [photo]
 
         AddProduct(dict(
             original_link=original_link,
-            full_name=full_name,
-            photo=photo,
+            name=full_name,
+            images=images,
             price=price,
-            brand=brand,
-            staff_pick=staff_pick,
             description="\n".join(description),
-        ), store, cate, sous_category, maxVal, more, less)
+        ), store, cate, maxVal, more, less)
         sleep(randint(12,25))
 
 

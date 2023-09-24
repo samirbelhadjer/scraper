@@ -122,11 +122,10 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
                 pass
 
             full_name = driver.find_element(By.XPATH, '//*[@id="root"]/div[3]/div[1]/div[1]/div[2]/div[1]/h1').text 
-            try :
-                #shipping = driver.find_element(By.CSS_SELECTOR,'#root > div.pdp-wrap.pdp-body > div.pdp-body-right > div > div > div.shipping--wrap--Dhb61O7 > div > div > div.dynamic-shipping-line.dynamic-shipping-titleLayout > span > span > strong').text.split("€")[-1]
-                shipping = "0"
-            except Exception: 
-                shipping = ' 0'
+            shipping_div = driver.find_element(By.CLASS_NAME,'dynamic-shipping-line')
+            shipping = shipping_div.text.split("€")[-1] 
+            if 'Livraison gratuite' in shipping:
+                shipping = '0'
 
             price_div = driver.find_element(By.CSS_SELECTOR,'div[data-pl="product-price"]')
             price_element = price_div.find_element(By.CLASS_NAME,'product-price-current')
@@ -138,18 +137,26 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
 
             price = price + shipping
             description = full_name
-            images = [photo]
+            images_src = [photo]
 
+            images  = driver.find_element(By.CLASS_NAME,'images-view-wrap')
+            if images:
+                images = images.find_elements(By.CSS_SELECTOR,'img')
+                if len(images) > 0 :
+                    images_src = []
+                    for img in images:
+                        img_url = img.get_attribute("src").replace('220x220','').replace('200*200','')
+                        images_src.append(img_url)
+                    
             driver.close()
             driver.switch_to.window(driver.window_handles[0])
             
-
 
             try : 
                 AddProduct(dict(
                 original_link=original_link,
                 name=full_name,
-                images=images,
+                images=images_src,
                 price=price,
                 description=description,
                 ), store, cate, maxVal, more, less)
