@@ -33,8 +33,8 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
     chrome_options = webdriver.ChromeOptions()
     
 
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
+    #chrome_options.add_argument("--headless")
+    #chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--start-maximized")
     chrome_options.add_argument("--disable-dev-shm-using") 
@@ -68,45 +68,54 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
         pass
 
 
-    language = driver.find_element(By.CSS_SELECTOR, '#switcher-info')
-    ActionChains(driver).move_to_element(language).click(language).perform()
-    sleep(1)
-    language = driver.find_element(By.CSS_SELECTOR, '#nav-global > div.ng-item-wrap.ng-item.ng-switcher.active > div > div > div > div.switcher-language.item.util-clearfix > div > span')
+    language = driver.find_element(By.CSS_SELECTOR, '#_full_container_header_23_ > div.pc-header--right--2cV7LB8 > div > div.pc-header--items--tL_sfQ4 > div.es--wrap--RYjm1RT')
     language.click()
     sleep(1)
-    language = driver.find_element(By.CSS_SELECTOR, '#nav-global > div.ng-item-wrap.ng-item.ng-switcher.active > div > div > div > div.switcher-language.item.util-clearfix > div > ul > li:nth-child(5) > a')
+    language = driver.find_element(By.CSS_SELECTOR, '#_full_container_header_23_ > div.pc-header--right--2cV7LB8 > div > div.pc-header--items--tL_sfQ4 > div.es--wrap--RYjm1RT > div.es--contentWrap--ypzOXHr.es--visible--12ePDdG > div:nth-child(4) > div')
     language.click()
     sleep(1)
-    language = driver.find_element(By.CSS_SELECTOR, '#nav-global > div.ng-item-wrap.ng-item.ng-switcher.active > div > div > div > div.switcher-currency.item.util-clearfix > div > span')
+    language = driver.find_element(By.CSS_SELECTOR, '#_full_container_header_23_ > div.pc-header--right--2cV7LB8 > div > div.pc-header--items--tL_sfQ4 > div.es--wrap--RYjm1RT > div.es--contentWrap--ypzOXHr.es--visible--12ePDdG > div:nth-child(4) > div > div.select--popup--W2YwXWt.select--visiblePopup--VUtkTX2 > div:nth-child(3)')
     language.click()
     sleep(1)
-    language = driver.find_element(By.CSS_SELECTOR, '#nav-global > div.ng-item-wrap.ng-item.ng-switcher.active > div > div > div > div.switcher-currency.item.util-clearfix > div > ul > li:nth-child(3) > a')
+  
+    language = driver.find_element(By.CSS_SELECTOR, '#_full_container_header_23_ > div.pc-header--right--2cV7LB8 > div > div.pc-header--items--tL_sfQ4 > div.es--wrap--RYjm1RT > div.es--contentWrap--ypzOXHr.es--visible--12ePDdG > div:nth-child(6) > div')
     language.click()
     sleep(1)
-    language = driver.find_element(By.CSS_SELECTOR, '#nav-global > div.ng-item-wrap.ng-item.ng-switcher.active > div > div > div > div.switcher-btn.item.util-clearfix > button')
+    language = driver.find_element(By.CSS_SELECTOR, '#_full_container_header_23_ > div.pc-header--right--2cV7LB8 > div > div.pc-header--items--tL_sfQ4 > div.es--wrap--RYjm1RT > div.es--contentWrap--ypzOXHr.es--visible--12ePDdG > div:nth-child(6) > div > div.select--popup--W2YwXWt.select--visiblePopup--VUtkTX2 > div:nth-child(2)')
     language.click()
     sleep(1)
+    language = driver.find_element(By.CSS_SELECTOR, '#_full_container_header_23_ > div.pc-header--right--2cV7LB8 > div > div.pc-header--items--tL_sfQ4 > div.es--wrap--RYjm1RT > div.es--contentWrap--ypzOXHr.es--visible--12ePDdG > div.es--saveBtn--w8EuBuy')
+    language.click()
+    sleep(3)
+    driver.get(url)
+    try : 
+        cookies = driver.find_element(By.CSS_SELECTOR, '#gdpr-new-container > div > div.global-gdpr-btn-wrap > button.btn-accept')
+        cookies.click()
+    except : 
+        pass
+    sleep(3)
     driver.execute_script("window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })")
-    sleep(2)
+    sleep(1.5)
     driver.execute_script("window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })")
-    sleep(5)
+    sleep(3)
     products = []
-    prod_divs = driver.find_elements(By.XPATH, '/html/body/div/div/div/div/div/div/div/a')
+    prod_divs = driver.find_elements(By.XPATH, '/html/body/div[5]/div[1]/div/div[2]/div[2]/div/div')
 
 
 
     for product in prod_divs :
-        try:
+
             try:
-                original_link = product.get_attribute('href')
+                a_el = product.find_element(By.XPATH, './/div/a')
+                original_link = a_el.get_attribute('href')
             except Exception as  e :
                 print('error: ',e)
                 continue
-            print('----> begine scrap \n')
-            photo = product.find_element(By.XPATH, './/div/img').get_attribute('src')
+
             driver.execute_script("window.open('');")
             driver.switch_to.window(driver.window_handles[1])    
-            driver.get(original_link)
+            driver.get(str(original_link))
+            sleep(4)
             driver.implicitly_wait(7)
             wait = WebDriverWait(driver, 10)
             try : 
@@ -114,14 +123,15 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
                 cookies.click()
             except : 
                 pass
-            sleep(1)
+            sleep(3)
             try : 
                 notification = driver.find_element(By.XPATH,'/html/body/div[9]/div/div[2]/div[3]/div[2]')
                 notification.click()
             except Exception: 
                 pass
 
-            full_name = driver.find_element(By.XPATH, '//*[@id="root"]/div[3]/div[1]/div[1]/div[2]/div[1]/h1').text 
+            full_name = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[3]/div/div[1]/div[1]/div[2]/div[4]/h1').text 
+                                                       
             shipping_div = driver.find_element(By.CLASS_NAME,'dynamic-shipping-line')
             shipping = shipping_div.text.split("€")[-1] 
             if 'Livraison gratuite' in shipping:
@@ -137,15 +147,18 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
 
             price = price + shipping
             description = full_name
-            images_src = [photo]
+            images_src = []
 
-            images  = driver.find_element(By.CLASS_NAME,'images-view-wrap')
+            images  = driver.find_element(By.CLASS_NAME, 'pdp-info-left')
+            print('------------>>>',images)
+
+
             if images:
                 images = images.find_elements(By.CSS_SELECTOR,'img')
                 if len(images) > 0 :
                     images_src = []
                     for img in images:
-                        img_url = img.get_attribute("src").replace('220x220','').replace('200*200','')
+                        img_url = img.get_attribute("src").replace('220x220','').replace('200*200','').replace('.jpg_80x80','')
                         images_src.append(img_url)
                     
             driver.close()
@@ -164,6 +177,4 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
             except Exception as e: 
                 print('error : ',e)
                 pass
-        except Exception:
-            continue
-
+    
