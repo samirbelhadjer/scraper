@@ -33,8 +33,8 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
     chrome_options = webdriver.ChromeOptions()
     
 
-    #chrome_options.add_argument("--headless")
-    #chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--start-maximized")
     chrome_options.add_argument("--disable-dev-shm-using") 
@@ -104,7 +104,7 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
 
 
     for product in prod_divs :
-
+        try:
             try:
                 a_el = product.find_element(By.XPATH, './/div/a')
                 original_link = a_el.get_attribute('href')
@@ -150,7 +150,6 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
             images_src = []
 
             images  = driver.find_element(By.CLASS_NAME, 'pdp-info-left')
-            print('------------>>>',images)
 
 
             if images:
@@ -177,4 +176,5 @@ def scrap_aliexpress(url, perc, store, cate, maxVal, more, less):
             except Exception as e: 
                 print('error : ',e)
                 pass
-    
+        except Exception as e:
+            continue
